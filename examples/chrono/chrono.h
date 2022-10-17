@@ -1,7 +1,7 @@
 #pragma once
 
 
-#define _CHRONO_NOMALLOC
+// #define _CHRONO_NOMALLOC
 // Remove comment above to switch to NOMALLOC mode
 
 #ifdef _CHRONO_NOMALLOC
