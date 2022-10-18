@@ -4,7 +4,7 @@
 
 # Objects
 
-Objects are either static-allocated or heap-allocated.
+Objects are either static-allocated or heap-allocated. For the developer, this is not really important. Just imagine your objects are heap-allocated.
 
 # Syntax
 
@@ -13,7 +13,7 @@ For example one must assign the function pointers in the constructor, it cannot 
 
 ## Calling class functions
 
-Other object oriented programming libraries (or other implementations) take a reference to the class as a parameter, even if you are calling the function from a struct field. To fix that, this library implements the `$(s)` macro. It expands to `(((typeof(s))(s_this = s)))`, basically returning itself but also saving the instance in a global `s_this` variable. **This implementation makes this library NOT thread safe and only compatible with compilers that support `typeof`**.
+Other object oriented programming libraries (or other implementations) take a reference to the class as a parameter, even if you are calling the function from a struct field. To fix that, this library implements the `$(s)` macro. It expands to `(((typeof(s))(__objectc_this = s)))`, basically returning itself but also saving the instance in a global `__objectc_this` variable. **This implementation makes this library NOT thread safe and only compatible with compilers that support `typeof`**.
 
 ```c
 double square_area = $(square).area();
@@ -21,27 +21,26 @@ double square_area = $(square).area();
 
 # Malloc, or no malloc
 
-By defining `_OBJECTC_NOMALLOC` before including objectc.h you can choose to use static-allocated structs.
+By defining `_OBJECTC_NOMALLOC` in objectc.h you can choose to use static-allocated structs.
 
 ## Code differences
 - Heap-allocated classes are pointers by default (fields accessed using `->`)
 - Heap-allocated classes can have destructors `void (*destruct)(...)`
 
-One example for handling both for your own library is found in `examples/chrono`.
+As the developer, you may just write your library code as you would write it for heap-allocated objects, as the library handles `_OBJECTC_NOMALLOC` by itself.
 
 ## Class declarations
 
 ```c
 #define class typedef struct
+#define destructf(...) void (*destruct)(__VA_ARGS__)
 ```
 This results:
 ```c
 class {
     int ClassParameter;
     void (*ClassFunction)();
-#ifndef _OBJECTC_NOMALLOC
-    void (*destruct)();
-#endif
+    destructf();
 } ClassName;
 ```
 
@@ -80,20 +79,16 @@ To deconstruct a class, one can use the `delete(instance)` macro.
 constructor(ClassName) {
     create(ClassName);
     def_func(ClassName,ClassFunction);              // this_ClassName->ClassFunction = ClassName_ClassFunction;
-#ifndef _OBJECTC_NOMALLOC
     def_destruct(ClassName);                        // this_ClassName->destruct = ClassName__dest;
-#endif
     def_prop(ClassName,ClassParameter) = 0;         // this_ClassName->ClassParameter = 0;
     return_class(ClassName);                        // return this_ClassName;
 }
-#ifndef _OBJECTC_NOMALLOC
 destructor(ClassName) {
     destructor_init(ClassName);
     this->ClassParameter = 0;
     destructor_free;
 }
-#endif
 ```
 
 # Example
-One implementation example with support for both heap-allocated objects and static-allocated objects can be found in ./examples/chrono.
+There are 2 examples available in the examples folder on the same repository.
