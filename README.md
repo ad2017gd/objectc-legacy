@@ -24,8 +24,8 @@ double square_area = $(square).area();
 By defining `_OBJECTC_NOMALLOC` before including objectc.h you can choose to use static-allocated structs.
 
 ## Code differences
-- **MALLOC**cated classes are pointers by default (fields accessed using `->`)
-- **MALLOC**cated classes can have destructors `void (*destruct)(...)`
+- Heap-allocated classes are pointers by default (fields accessed using `->`)
+- Heap-allocated classes can have destructors `void (*destruct)(...)`
 
 One example for handling both for your own library is found in `examples/chrono`.
 
@@ -96,4 +96,4 @@ destructor(ClassName) {
 ```
 
 # Example
-One implementation example with support for both MALLOCcated objects and static-allocated objects can be found in ./examples/chrono.
+One implementation example with support for both heap-allocated objects and static-allocated objects can be found in ./examples/chrono.
