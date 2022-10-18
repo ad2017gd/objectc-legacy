@@ -30,4 +30,5 @@ void* __objectc_this;
 #define destructor_init(CLASSNAME) CLASSNAME* this = 0; return
 #define def_destruct(CLASSNAME)
 #define destructor_free
+#define delete(INSTANCE)
  
