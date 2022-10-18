@@ -3,12 +3,28 @@
 #include <time.h>
 #include <stdbool.h>
 #include <windows.h>
+
 #include "examples/chrono/chrono.h"
+#include "examples/rectangle/rectangle.h"
 
 int main() {
-    
-    #ifndef _CHRONO_NOMALLOC
-    printf("CHRONO: MALLOC\n\n");
+    #ifndef _OBJECTC_NOMALLOC
+    printf("RECTANGLE: MALLOC\n\n");
+    ORectangle* rect = new(ORectangle)(4,5);
+    printf("RECTANGLE : WIDTH = %f, HEIGHT = %f ; expected: 4,5\n", rect->width, rect->height);
+    printf("RECTANGLE AREA = %f ; expected: 20\n", $(rect)->area());
+    #else
+    printf("RECTANGLE: MALLOC\n\n");
+    new(ORectangle,rect,4,5);
+    printf("RECTANGLE : WIDTH = %f, HEIGHT = %f ; expected: 4,5\n", rect.width, rect.height);
+    printf("RECTANGLE AREA = %f ; expected: 20\n", $(rect).area());
+    #endif
+
+
+
+
+    #ifndef _OBJECTC_NOMALLOC
+    printf("\n\n----------------------------\n\nCHRONO: MALLOC\n\n");
 
     Chrono* timer = new(Chrono)();
     printf("Waiting 1s\n");
@@ -26,8 +42,8 @@ int main() {
     Sleep(4000);
     printf($(timer)->running ? "(RUNNING)\n" : "(STOPPED)\n");
     printf("elapsed: %f, expected: 8s\n", $(timer)->elapsed());
-    printf("elapsed: %f, expected: 8s\n", $(timer)->elapsed());
-
+    Sleep(1000);
+    printf("elapsed: %f, expected: 9s\n", $(timer)->elapsed());
     delete(timer);
     
 
@@ -50,7 +66,8 @@ int main() {
     Sleep(4000);
     printf($(timer).running ? "(RUNNING)\n" : "(STOPPED)\n");
     printf("elapsed: %f, expected: 8s\n", $(timer).elapsed());
-    printf("elapsed: %f, expected: 8s\n", $(timer).elapsed());
+    Sleep(1000);
+    printf("elapsed: %f, expected: 9s\n", $(timer).elapsed());
 
     #endif
 
