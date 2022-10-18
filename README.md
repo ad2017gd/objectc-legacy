@@ -4,7 +4,7 @@
 
 # Objects
 
-Objects are either stack-allocated or heap-allocated structs.
+Objects are either static-allocated or heap-allocated.
 
 # Syntax
 
@@ -21,11 +21,11 @@ double square_area = $(square).area();
 
 # Malloc, or no malloc
 
-By defining `_OBJECTC_NOMALLOC` before including objectc.h you can choose to use stack-allocated structs.
+By defining `_OBJECTC_NOMALLOC` before including objectc.h you can choose to use static-allocated structs.
 
 ## Code differences
-- **MALLOC**cated classes are pointers by default (fields accessed using `->`)
-- **MALLOC**cated classes can have destructors `void (*destruct)(...)`
+- Heap-allocated classes are pointers by default (fields accessed using `->`)
+- Heap-allocated classes can have destructors `void (*destruct)(...)`
 
 One example for handling both for your own library is found in `examples/chrono`.
 
@@ -62,7 +62,7 @@ type ClassName_FieldName(FieldArgs...) {
 ```
 
 ## Constructors and destructors
-**Destructors are not available for stack-allocated classes.**
+**Destructors are not available for static-allocated classes.**
 To deconstruct a class, one can use the `delete(instance)` macro.
 ```c
 #define constructor(CLASSNAME, ...) [...]
@@ -96,4 +96,4 @@ destructor(ClassName) {
 ```
 
 # Example
-One implementation example with support for both MALLOCcated objects and stack-allocated objects can be found in ./examples/chrono.
+One implementation example with support for both heap-allocated objects and static-allocated objects can be found in ./examples/chrono.
