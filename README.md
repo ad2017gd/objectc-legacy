@@ -13,7 +13,7 @@ For example one must assign the function pointers in the constructor, it cannot 
 
 ## Calling class functions
 
-Other object oriented programming libraries (or other implementations) take a reference to the class as a parameter, even if you are calling the function from a struct field. To fix that, this library implements the `$(s)` macro. It expands to `(((typeof(s))(__objectc_this = s)))`, basically returning itself but also saving the instance in a global `__objectc_this` variable. **This implementation makes this library NOT thread safe and only compatible with compilers that support `typeof`**.
+Other object oriented programming libraries (or other implementations) take a reference to the class as an argument, even if you are calling the function from a struct field. To fix that, this library implements the `$(s)` macro. It expands to `(((typeof(s))(__objectc_this = s)))`, basically returning itself but also saving the instance in a global `__objectc_this` variable. **This implementation makes this library NOT thread safe and only compatible with compilers that support `typeof`**.
 
 ```c
 double square_area = $(square).area();
